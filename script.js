@@ -1,17 +1,6 @@
 // ====== Config ======
-// ====== CORS proxy fallbacks ======
-const PROXY_BUILDERS = [
-  // AllOrigins (sometimes flaky)
-  (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-
-  // CodeTabs proxy (often works when AllOrigins doesn't)
-  (url) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
-
-  // Another public proxy
-  (url) => `https://cors.isomorphic-git.org/${url}`,
-
-  // (Optional) add more later if needed
-];
+// Use your Cloudflare Worker as RSS proxy (stable)
+const PROXY_BASE = "https://dadcryptonews-proxy.icothestorylingerer.workers.dev/?url=";
 
 async function fetchWithTimeout(url, ms = 12000) {
   const controller = new AbortController();
@@ -22,7 +11,6 @@ async function fetchWithTimeout(url, ms = 12000) {
       cache: "no-store",
       signal: controller.signal,
       headers: {
-        // helps some RSS servers respond with XML
         "Accept": "application/rss+xml, application/xml, text/xml, */*",
       },
     });
@@ -33,21 +21,6 @@ async function fetchWithTimeout(url, ms = 12000) {
   }
 }
 
-async function fetchFeed(feedUrl) {
-  let lastErr = null;
-
-  for (const build of PROXY_BUILDERS) {
-    const proxied = build(feedUrl);
-    try {
-      return await fetchWithTimeout(proxied, 12000);
-    } catch (e) {
-      lastErr = e;
-      // try next proxy
-    }
-  }
-
-  throw lastErr || new Error("All proxies failed");
-}
 const AUTO_REFRESH_MINUTES = 10;
 
 const DEFAULT_SOURCES = [
@@ -430,4 +403,5 @@ autoRefreshToggle.addEventListener("change", (e) => {
 // Initial load
 loadAllFeeds();
 startAutoRefresh();
+
 
