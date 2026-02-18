@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>加密货币资讯聚合（RSS）</title>
+    <meta name="description" content="一个简单的加密货币新闻聚合网站（RSS）。" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="brand">
+          <div class="logo">₿</div>
+          <div>
+            <div class="brand-title">加密货币资讯</div>
+            <div class="brand-sub">RSS 聚合 • 自动刷新 • 简体中文界面</div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="refreshBtn" class="btn primary">刷新</button>
+          <button id="settingsBtn" class="btn">源设置</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="panel">
+        <div class="toolbar">
+          <div class="filters">
+            <button class="chip active" data-filter="all">全部</button>
+            <button class="chip" data-filter="btc">比特币</button>
+            <button class="chip" data-filter="eth">以太坊</button>
+            <button class="chip" data-filter="alt">山寨/热点</button>
+            <button class="chip" data-filter="reg">监管/政策</button>
+            <button class="chip" data-filter="sec">安全/黑客</button>
+          </div>
+
+          <div class="search">
+            <input id="searchInput" type="search" placeholder="搜索：例如 BTC / 以太坊 / ETF / 交易所…" />
+          </div>
+        </div>
+
+        <div class="meta">
+          <div id="statusText" class="muted">准备就绪。</div>
+          <div class="meta-right">
+            <label class="toggle">
+              <input id="autoRefreshToggle" type="checkbox" checked />
+              <span>自动刷新（10分钟）</span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section class="list" id="newsList" aria-live="polite"></section>
+
+      <footer class="footer">
+        <div class="muted">
+          说明：本站仅展示标题/摘要/时间并链接到原文；内容版权归原站点所有。
+        </div>
+        <div class="muted">
+          <span id="year"></span> • Built for Dad ❤️
+        </div>
+      </footer>
+    </main>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="modal" aria-hidden="true">
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-head">
+          <h2 id="modalTitle">源设置</h2>
+          <button class="btn" id="closeModalBtn">关闭</button>
+        </div>
+
+        <p class="muted" style="margin-top: 0;">
+          你可以开关某些 RSS 源。关闭后不会抓取该源内容。
+        </p>
+
+        <div id="sourcesBox" class="sources"></div>
+
+        <div class="modal-foot">
+          <button class="btn" id="resetSourcesBtn">恢复默认</button>
+          <button class="btn primary" id="saveSourcesBtn">保存</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
